@@ -1,0 +1,43 @@
+.App {
+  text-align: left;
+}
+
+.Jus-logo{
+  max-height: 25vh;
+  max-width: 25vw;
+  padding-top: 5vh;
+  padding-left: 5vw;
+}
+
+.App-header {
+  background-color: #a0a0a0;
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  flex-direction: left;
+  align-items: flex-start;
+  color: white;
+  
+}
+
+.Buscador{
+  padding-top: 5vh;
+  padding-left: 3vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.Title{
+
+  font-size: 2rem;
+}
+
+.Subtitle{
+  font-size: 1.2rem;
+}

@@ -29,10 +29,6 @@
   justify-content: flex-start;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
 .Title{
 
   font-size: 2rem;
@@ -40,4 +36,8 @@
 
 .Subtitle{
   font-size: 1.2rem;
+}
+
+.Input{
+  display: flex;
 }

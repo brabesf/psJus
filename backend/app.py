@@ -3,17 +3,31 @@ from flask_cors import CORS
 import strawberry
 from strawberry.flask.views import GraphQLView
 from typing import Optional, List
+import json
 
-def get_matches(text: str) -> List[str]:
-    possible = ['a', 'as', 'asw', 'you', 'aser', 'you asked', 'baby', 'idk', 'whadup', 'aaa', 'asf', 'as well as']
-    return [i for i in possible if text in i]
+class Suggestor:
+    def __init__(self, initial_data):
+
+        with open(initial_data, 'r') as arquivo_buscas:
+            self.suggestions = json.load(arquivo_buscas)['buscas']
+
+    def add_suggestion(self, suggestion):
+        self.suggestions.append(suggestion)
+    
+    def get_suggestion(self, query):
+        if len(query) < 4:
+            return []
+        return[i for i in self.suggestions if i.lower().startswith(query.lower())][:20]
+
+suggestor = Suggestor("./data/buscas.json")
 
 @strawberry.type
 class Query:
+    
     @strawberry.field
     def getMatches(self, text: str) -> List[str]:
         
-        return get_matches(text)
+        return suggestor.get_suggestion(text)
     
 schema = strawberry.Schema(query=Query)
 
@@ -25,4 +39,5 @@ app.add_url_rule(
 )
 
 if __name__ == "__main__":
+    
     app.run(host='0.0.0.0', port=4000)

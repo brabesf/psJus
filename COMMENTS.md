@@ -10,13 +10,22 @@ GraphQL manda requisição com texto até então escrito pelo usuário para o ba
 
 ## Entender como fazer o autocomplete
 
-Procurei por algumas fontes de como fazer o autocomplete. No início me deparei com algumas fontes pagas, depois encontrei um vídeo da Google mostrando que eles usam as buscas já executadas por outros usuários no Google Search para realizar essa recomendação. Portanto, fui em busca de datasets de dados sobre as buscas realizadas. Não encontrei nenhum dataset pronto, acho que gastarei muito tempo procurando por um, tenho a ideia de gerar um sinteticamente com o llama3 pelo Groq, e a ideia será popular à medida com que cada busca é feita.
+Procurei por algumas fontes de como fazer o autocomplete. No início me deparei com algumas fontes pagas, depois encontrei um vídeo da Google mostrando que eles usam as buscas já executadas por outros usuários no Google Search para realizar essa recomendação. Portanto, fui em busca de datasets de dados sobre as buscas realizadas. 
+
+Não encontrei nenhum dataset pronto, acho que gastarei muito tempo procurando por um, tenho a ideia de gerar um sinteticamente com o llama3 pelo Groq, e a ideia será popular à medida com que cada busca é feita.
 
 ## Criar o frontend com ReactJs
 
+Criando o frontend com ReactJs tentei ser fiel ao esboço enviado no prompt do desafio. Criei o projeto com npx create e as entradas de texto e o botão com material-ui. Optei por utilizar material-ui porque além de serem bonitas as animações de seus componentes, ele contém a opção de autocomplete com negrito para o input de texto, o que é exatamente o que é pedido. 
+
+Dessa forma ele pode ajudar bastante com a conclusão do projeto. Ja optei por utilizar logo de início as medidas relativas para os conteineres do css, com o intuito de já ter uma página responsiva logo de início. O próximo passo agora é entender como o GraphQL funciona e entender como fazer requisições à ele pelo React.
 
 # Decisões
 
 ## Criar dataset para autocomplete sinteticamente com o LLama-3 e Groq. 
 
 **Motivação:** procurei por algum tempo por datasets abertos de queries de search, todos os resultados que encontrei foram em inglês. A ideia é que o dataset seja populado à medida que as buscas são feitas, mas para não começar com uma base vazia vou popular algumas buscas iniciais com LLM's. 
+
+## Usar material-ui para os inputs do front-end
+
+**Motivação:** além de serem bonitas as animações de seus componentes, o material-ui contém a opção de autocomplete com negrito para o input de texto, o que é pedido no desafio.

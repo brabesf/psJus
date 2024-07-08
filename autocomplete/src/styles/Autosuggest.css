@@ -1,0 +1,13 @@
+.Input{
+    display: flex;
+}
+
+.Opcoes{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 30vh;
+    overflow-y: scroll;
+    width: fit-content;
+    }

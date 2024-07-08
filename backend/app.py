@@ -5,7 +5,7 @@ from strawberry.flask.views import GraphQLView
 from typing import Optional, List
 
 def get_matches(text: str) -> List[str]:
-    possible = ['a', 'as', 'asw', 'you', 'aser']
+    possible = ['a', 'as', 'asw', 'you', 'aser', 'you asked', 'baby', 'idk', 'whadup', 'aaa', 'asf', 'as well as']
     return [i for i in possible if text in i]
 
 @strawberry.type

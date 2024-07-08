@@ -3,7 +3,7 @@ import { useQuery, gql } from '@apollo/client';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {TextField, Button} from '@material-ui/core'
 import { useState } from 'react';
-
+import './styles/Autosuggest.css';
 
 function Autosuggest(props) {
   
@@ -42,12 +42,16 @@ function Autosuggest(props) {
             }} 
             variant='contained'>BUSCAR</Button>
           </div>
-          <div>{loading?(
+          <div className='Opcoes'>{loading?(
             <p></p>
             ) : (
             data.getMatches.map((text, index) => (
               <Button style={{backgroundColor: '#ffffff',
-                color: 'black'
+                color: 'black',
+                minWidth: `35vw`,
+                justifyContent: `flex-start`,
+                textTransform: 'none',
+                height: '3vh'
               }}
               onClick={() => setQuery(text)}          
               variant='contained'>{text}</Button>

@@ -6,7 +6,7 @@ Aqui descreverei etapa por etapa do que está sendo desenvolvido no projeto, à 
 
 Front-end em React com caixa de input text, envia requisição para o GraphQL (ainda não sei como funciona) a cada mudança no input (sempre que o usuário digita algum caractere).
 
-GraphQL manda requisição com texto até então escrito pelo usuário para o back-end. Este usa o texto até então escrito para criar as sugestões e as devolve pelo GraphQL ao front-end. 
+GraphQL manda requisição com texto até então escrito pelo usuário para o backend. Este usa o texto até então escrito para criar as sugestões e as devolve pelo GraphQL ao front-end. 
 
 ## Entender como fazer o autocomplete
 
@@ -20,6 +20,20 @@ Criando o frontend com ReactJs tentei ser fiel ao esboço enviado no prompt do d
 
 Dessa forma ele pode ajudar bastante com a conclusão do projeto. Ja optei por utilizar logo de início as medidas relativas para os conteineres do css, com o intuito de já ter uma página responsiva logo de início. O próximo passo agora é entender como o GraphQL funciona e entender como fazer requisições à ele pelo React.
 
+## Entender como funciona o GraphQL
+
+Em primeiro momento, optei por procurar um vídeo que explicasse como funciona o graphQL, mas achei um tutorial muito básico. Procurei então um tutorial mais direto ao ponto, em como utilizar o GraphQL em React e encontrei o seguinte [vídeo](https://www.youtube.com/watch?v=YyUWW04HwKY), que é um pouco lento, e não mostra exatamente como utilizá-lo, mas mostra um pouco de como utilizar o GraphQL em React com o Apollo. Com isso, idealizei que para a solução funcionar, deveria ser feita uma query ao backend com o campo de input mudando, indicando os caracteres já digitados pelo usuário. Parti então para o backend.
+
+## Entender como comunicar com o backend pelo GraphQL
+
+Essa parte foi muito reveladora para mim, pois até então não tive a oportunidade de criar uma solução com backend e front-end se comunicando. 
+
+No enunciado do desafio, é citado que o sistema deve pode ter o backend usando a linguagem de programação de minha preferência. Como no meu caso, a linguagem de programação que mais domino é o Python, busquei por ferramentas para realizar a comunicação entre o backend em Python e o GraphQL que receberia a query do Frontend em React. 
+
+Em primeira instância, tentei utilizar o graphene com o flask, mas estava tendo muitos problemas com a incompatibilidade das versões das dependências dessas bibliotecas. Com isso, optei por utilizar a biblioteca strawberry com Flask, o que foi suficiente para subir o backend e receber a query no frontend.
+
+
+
 # Decisões
 
 ## Criar dataset para autocomplete sinteticamente com o LLama-3 e Groq. 
@@ -29,3 +43,7 @@ Dessa forma ele pode ajudar bastante com a conclusão do projeto. Ja optei por u
 ## Usar material-ui para os inputs do front-end
 
 **Motivação:** além de serem bonitas as animações de seus componentes, o material-ui contém a opção de autocomplete com negrito para o input de texto, o que é pedido no desafio.
+
+## Usar Python e strawberry no backend
+
+**Motivação:** Como Python é minha linguagem de preferência, optei por utilizá-la no desenvolvimento do backend. Busquei realizar a comunicação com o GraphQL pelo graphene primeiro, mas por porblemas de incompatiblidade troquei para a bilbioteca strawberry.

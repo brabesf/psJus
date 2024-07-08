@@ -10,6 +10,7 @@
 }
 
 .App-header {
+  z-index: 100;
   background-color: #a0a0a0;
   min-height: 100vh;
   min-width: 100vw;

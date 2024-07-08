@@ -4,6 +4,8 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import {TextField, Button} from '@material-ui/core'
 import { useState } from 'react';
 import './styles/Autosuggest.css';
+import parse from 'autosuggest-highlight/parse';
+import match from 'autosuggest-highlight/match';
 
 function Autosuggest(props) {
   
@@ -45,18 +47,26 @@ function Autosuggest(props) {
           <div className='Opcoes'>{loading?(
             <p></p>
             ) : (
-            data.getMatches.map((text, index) => (
+            data.getMatches.map((text, index) => {
+              const firstPart = text.substring(0, query.length); // First 4 characters
+              const restPart = text.substring(query.length); // Rest of the text
+              return (
               <Button style={{backgroundColor: '#ffffff',
                 color: 'black',
                 minWidth: `35vw`,
                 justifyContent: `flex-start`,
                 textTransform: 'none',
-                height: '3vh'
+                height: '3vh',
+                fontWeight: index<4? 700: 400
               }}
               onClick={() => setQuery(text)}          
-              variant='contained'>{text}</Button>
-              
-            ))
+              variant='contained'>
+                <span style={{ fontWeight: 700 }}>{firstPart}</span>
+                <span style={{ fontWeight: 400 }}>{restPart}</span>
+              </Button>
+              )
+            }
+            )
           )}
           </div>
         </div>;

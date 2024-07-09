@@ -1,6 +1,6 @@
 import logo from './resources/jusbrasil.png'
 import './styles/App.css';
-import Autosuggest from './Autosuggest';
+import Autosuggest from './components/Autosuggest';
 
 function App() {
   

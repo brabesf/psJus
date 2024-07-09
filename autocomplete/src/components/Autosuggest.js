@@ -1,8 +1,8 @@
 import React from 'react';
-import { useLazyQuery, useMutation, gql } from '@apollo/client';
+import { useLazyQuery, useMutation, gql, useApolloClient } from '@apollo/client';
 import {TextField, Button} from '@material-ui/core'
 import { useState } from 'react';
-import './styles/Autosuggest.css';
+import '../styles/Autosuggest.css';
 import { withStyles } from '@material-ui/core/styles';
 
 const OptionButton = withStyles({
@@ -29,22 +29,25 @@ function Autosuggest() {
     getMatches(text: $text)
   }
 `;
-
+const client = useApolloClient();
 const SET_MATCHES = gql`
   mutation SetMatch($text: String!) {
     setMatch(text: $text)
   }
 `;
 
-const [getMatches, { loading, error, data }] = useLazyQuery(GET_MATCHES);
-const [setMatches, { loadingSet, errorSet, dataSet }] = useMutation(SET_MATCHES);
+const [getMatches, { loading, error, data, refetch }] = useLazyQuery(GET_MATCHES);
+const [setMatch, { loadingSet, errorSet, dataSet }] = useMutation(SET_MATCHES);
 
 const handleClick = (text) => {
   setQuery(text);
 };
 
-const handleSearch = () => {
-  setMatches({ variables: { text: query } });
+const handleSearch = async () => {
+  await setMatch({ variables: { text: query } });
+  await client.clearStore();
+  refetch();
+  getMatches({ variables: { text: query } });
 };
 
 const handleType = (event) => {

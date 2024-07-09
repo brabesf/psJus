@@ -1,23 +1,41 @@
+from typing import Optional, List
+import json
+
 from flask import Flask
 from flask_cors import CORS
 import strawberry
 from strawberry.flask.views import GraphQLView
-from typing import Optional, List
-import json
+
 import unidecode
 
 class Suggestor:
+    '''
+    Class to implement suggestor. Should give suggestions, read data on base suggestions and update them.
+    '''
     def __init__(self, initial_data):
+        '''
+        Constructor
+
+        initial_data (str or path-Like): Path to initial suggestions on a json file, 
+        it should have a field 'buscas' with a list of str.
+        '''
 
         with open(initial_data, 'r') as arquivo_buscas:
             self.suggestions = json.load(arquivo_buscas)['buscas']
 
-    def add_suggestion(self, suggestion):
+    def add_suggestion(self, suggestion:str):
+        '''
+        Adds suggestion to start of list
+        '''
         self.suggestions.insert(0, suggestion)
     
-    def get_suggestion(self, query):
+    def get_suggestion(self, query:str) -> List[str]:
+        '''
+        Gets a list up to 20 sugestions if query larger than 4 characters.
+        '''
         if len(query) < 4:
             return []
+        
         adapted_query = unidecode.unidecode(query).lower()
         return[i for i in self.suggestions if i.lower().startswith(adapted_query)][:20]
 
@@ -38,7 +56,6 @@ class Mutation:
     def setMatch(self, text: str) -> None:
         
         suggestor.add_suggestion(text)
-        
         return
     
 schema = strawberry.Schema(query=Query, mutation=Mutation)

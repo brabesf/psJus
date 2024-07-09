@@ -1,5 +1,6 @@
 from typing import Optional, List
 import json
+import os 
 
 from flask import Flask
 from flask_cors import CORS
@@ -27,7 +28,7 @@ class Suggestor:
         '''
         Adds suggestion to start of list
         '''
-        self.suggestions.insert(0, suggestion)
+        self.suggestions.insert(0, unidecode.unidecode(suggestion))
     
     def get_suggestion(self, query:str) -> List[str]:
         '''
@@ -39,7 +40,7 @@ class Suggestor:
         adapted_query = unidecode.unidecode(query).lower()
         return[i for i in self.suggestions if i.lower().startswith(adapted_query)][:20]
 
-suggestor = Suggestor("./data/buscas.json")
+suggestor = Suggestor(os.path.join('data', 'buscas.json'))
 
 @strawberry.type
 class Query:

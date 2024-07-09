@@ -1,3 +1,38 @@
+# Decisões
+
+## Criar dataset para autocomplete sinteticamente com o LLama-3 e Groq, e ir agregando a cada pesquisa. 
+
+**Motivação:** procurei por algum tempo por datasets abertos de queries de search, todos os resultados que encontrei foram em inglês. A ideia é que o dataset seja populado à medida que as buscas são feitas, mas para não começar com uma base vazia vou popular algumas buscas iniciais com LLM's. 
+
+Ao pesquisar sobre as ferramentas de autocomplete também verifiquei que a chance de uma pessoa fazer uma pesquisa que já fez recentemente é alta, então toda sugestão agregada é agregada com maior 'prioridade'.
+
+## Usar material-ui para os inputs do front-end
+
+**Motivação:** além de serem bonitas as animações de seus componentes, o material-ui contém a opção de autocomplete com negrito para o input de texto, o que é pedido no desafio.
+Embora o autocomplete não tenha funcionado sem a alteração personalizada dos botões, as animações e estilos foram pontos positivos de seu uso.
+
+## Usar Python e strawberry no backend
+
+**Motivação:** Como Python é minha linguagem de preferência, optei por utilizá-la no desenvolvimento do backend. Busquei realizar a comunicação com o GraphQL pelo graphene primeiro, mas por porblemas de incompatiblidade troquei para a bilbioteca strawberry.
+
+## Remoção de case-sensitivity e acentuação das sugestões
+
+**Motivação:** Muitas vezes o usuário pode digitar a query com alguma letra maiúscula por engano, ou não utilizar acentuação. Para minimizar as inconveniências que isso poderia trazer ao resultado do autocomplete, na hora das sugestões ele faz os tratamentos adequados para ignorar isso.
+
+## Usar useLazyQuery Hook do Apollo no front-end.
+
+**Motivação:** O hook utilizado por padrão em useQuery faz inúmeras requisições ao backend, salvo as que têm em cache. Como nosso sistema só deve fazer requisições à medida que o usuário interage com a página (digita a query ou seleciona uma sugestão) o hook mais adequado é o useLazyQuery. 
+
+Além disso, sempre que uma sugestão é adicionada (como pode ser verificado à seguir) é limpado o cache, pois o resultado para queries anteriores pode ter mudado em relação ao resultado salvo em cache.
+
+## Usar mutação para adicionar sugestão.
+
+Se um usuário buscar por algo que ainda não foi definido como uma possível sugestão, o front-end envia uma mutação por graphQL ao backend para adicionar essa sugestão na lista. 
+
+**Motivação:** Atualizar as possíveis buscas à medida que o público utiliza o sistema, e para editar a base geralmente é utilizada a mutação em GraphQL. Basta verificar o primeiro parágrafo sobre mutações no [site do GraphQL](https://graphql.org/graphql-js/mutations-and-input-types/)
+
+**Problema com implementação atual:** A implementação atual foi apenas para teste da funcionalidade, em uma situação real é válido utilizar outra estrutura de dados para esse caso, que utilize a frequência da pesquisa em consideração. Ela pode também armazenar as pesquisas feitas pelos próprios usuários, uma vez que procurar novamente pela mesma query é um comportamento esperado.
+
 # Log
 
 Aqui descreverei etapa por etapa do que está sendo desenvolvido no projeto, à medida que cada etapa ocorre. 
@@ -30,20 +65,25 @@ Essa parte foi muito reveladora para mim, pois até então não tive a oportunid
 
 No enunciado do desafio, é citado que o sistema deve pode ter o backend usando a linguagem de programação de minha preferência. Como no meu caso, a linguagem de programação que mais domino é o Python, busquei por ferramentas para realizar a comunicação entre o backend em Python e o GraphQL que receberia a query do Frontend em React. 
 
-Em primeira instância, tentei utilizar o graphene com o flask, mas estava tendo muitos problemas com a incompatibilidade das versões das dependências dessas bibliotecas. Com isso, optei por utilizar a biblioteca strawberry com Flask, o que foi suficiente para subir o backend e receber a query no frontend.
+Em primeira instância, tentei utilizar o graphene com o flask, mas estava tendo muitos problemas com a incompatibilidade das versões das dependências dessas bibliotecas. Com isso, optei por utilizar a biblioteca strawberry com Flask, o que foi suficiente para subir o backend e receber a query no frontend. 
 
+Em primeiro momento para comunicar o frontend com o backend defini um hook useQuery `getMatches` que deve usar a query como input de texto para o backend devolver no máximo 
 
+## Implementação front-end das sugestões
 
-# Decisões
+Utilizou-se a propriedade do `y-overflow` no css para utilizar o scroll, e definiu-se uma div do tamanho de 10 sugestões para seguir o que foi pedido no enunciado. Para negritar as partes, utiliza-se o tamanho da query até então, e se separam as sugestões em 2 partes: A parte já escrita e a que não foi. Com formatação condicional é possível destacar a parte já escrita, que foi inspirada pelo código fonte do material-ui, mas não foi capaz de implementá-lo diretamente. 
 
-## Criar dataset para autocomplete sinteticamente com o LLama-3 e Groq. 
+## Usar useLazyQuery Hook do Apollo no front-end.
 
-**Motivação:** procurei por algum tempo por datasets abertos de queries de search, todos os resultados que encontrei foram em inglês. A ideia é que o dataset seja populado à medida que as buscas são feitas, mas para não começar com uma base vazia vou popular algumas buscas iniciais com LLM's. 
+O hook utilizado por padrão em useQuery faz inúmeras requisições ao backend, salvo as que têm em cache. Como nosso sistema só deve fazer requisições à medida que o usuário interage com a página (digita a query ou seleciona uma sugestão) o hook mais adequado é o useLazyQuery. 
 
-## Usar material-ui para os inputs do front-end
+## Adição da base inicial de sugestões
 
-**Motivação:** além de serem bonitas as animações de seus componentes, o material-ui contém a opção de autocomplete com negrito para o input de texto, o que é pedido no desafio.
+Para criar a base de início utilizei o modelo LLama3-70b pelo Groq com o Google Colab para criar 100 possíveis sugestões. Isso foi possível utilizando um prompt few-shot, cujos exemplos consegui de sugestões que verifiquei na ferramenta de busca do site Jusbrasil. Com as 100 sugestões criadas sinteticamente, utilizei Regex para salvá-las em um json por um dicionário com uma lista de 'buscas'. 
 
-## Usar Python e strawberry no backend
+## Mutação para adicionar sugestões
 
-**Motivação:** Como Python é minha linguagem de preferência, optei por utilizá-la no desenvolvimento do backend. Busquei realizar a comunicação com o GraphQL pelo graphene primeiro, mas por porblemas de incompatiblidade troquei para a bilbioteca strawberry.
+Foi criado um Hook de mutação em GraphQL, por sugestão do próprio site, para poder adicionar sugestões à base de dados. Essas sugestões são o texto que está digitado no campo de busca antes de o usuário clicar no botão "BUSCAR". Essa sugestão é adicionada ao início da lista, o que configura maior prioridade de recomendação para sugestões mais recentes. 
+
+Quando se adiciona a sugestão também é limpo o cache do Apollo. Isso é feito pois o cache tem o resultado para queries anteriores armazenado, mas como alguns desses resultados podem ter sido alterados ao introduzir uma nova sugestão à lista, a requisição deve ser feita novamente, e não só utilizada a que já está salva (por estar desatualizada).
+

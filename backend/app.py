@@ -4,6 +4,7 @@ import strawberry
 from strawberry.flask.views import GraphQLView
 from typing import Optional, List
 import json
+import unidecode
 
 class Suggestor:
     def __init__(self, initial_data):
@@ -17,7 +18,8 @@ class Suggestor:
     def get_suggestion(self, query):
         if len(query) < 4:
             return []
-        return[i for i in self.suggestions if i.lower().startswith(query.lower())][:20]
+        adapted_query = unidecode.unidecode(query).lower()
+        return[i for i in self.suggestions if i.lower().startswith(adapted_query)][:20]
 
 suggestor = Suggestor("./data/buscas.json")
 

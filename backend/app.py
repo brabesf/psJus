@@ -13,7 +13,7 @@ class Suggestor:
             self.suggestions = json.load(arquivo_buscas)['buscas']
 
     def add_suggestion(self, suggestion):
-        self.suggestions.append(suggestion)
+        self.suggestions.insert(0, suggestion)
     
     def get_suggestion(self, query):
         if len(query) < 4:
@@ -31,7 +31,17 @@ class Query:
         
         return suggestor.get_suggestion(text)
     
-schema = strawberry.Schema(query=Query)
+@strawberry.type
+class Mutation:
+    
+    @strawberry.field
+    def setMatch(self, text: str) -> None:
+        
+        suggestor.add_suggestion(text)
+        
+        return
+    
+schema = strawberry.Schema(query=Query, mutation=Mutation)
 
 app = Flask(__name__)
 CORS(app)

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLazyQuery, gql } from '@apollo/client';
+import { useLazyQuery, useMutation, gql } from '@apollo/client';
 import {TextField, Button} from '@material-ui/core'
 import { useState } from 'react';
 import './styles/Autosuggest.css';
@@ -30,14 +30,21 @@ function Autosuggest() {
   }
 `;
 
+const SET_MATCHES = gql`
+  mutation SetMatch($text: String!) {
+    setMatch(text: $text)
+  }
+`;
+
 const [getMatches, { loading, error, data }] = useLazyQuery(GET_MATCHES);
+const [setMatches, { loadingSet, errorSet, dataSet }] = useMutation(SET_MATCHES);
 
 const handleClick = (text) => {
   setQuery(text);
 };
 
 const handleSearch = () => {
-  getMatches({ variables: { text: query } });
+  setMatches({ variables: { text: query } });
 };
 
 const handleType = (event) => {

@@ -8,11 +8,11 @@ Ao pesquisar sobre as ferramentas de autocomplete também verifiquei que a chanc
 
 Exemplo de incorporação de sugestão:
 
-![Antes da sugestao](https://ibb.co/HVSqJ8m)
+![Antes da sugestao](https://prnt.sc/R2ica9Q018nv)
 
 Ao clicar no botão "BUSCAR" a sugestão é registrada.
 
-![Depois da sugestao](https://ibb.co/Y09JdTF)
+![Depois da sugestao](https://prnt.sc/lniZ6LTYr6sU)
 
 
 ## Usar material-ui para os inputs do front-end

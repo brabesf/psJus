@@ -6,6 +6,15 @@
 
 Ao pesquisar sobre as ferramentas de autocomplete também verifiquei que a chance de uma pessoa fazer uma pesquisa que já fez recentemente é alta, então toda sugestão agregada é agregada com maior 'prioridade'.
 
+Exemplo de incorporação de sugestão:
+
+![Antes da sugestao](https://ibb.co/HVSqJ8m)
+
+Ao clicar no botão "BUSCAR" a sugestão é registrada.
+
+![Depois da sugestao](https://ibb.co/Y09JdTF)
+
+
 ## Usar material-ui para os inputs do front-end
 
 **Motivação:** além de serem bonitas as animações de seus componentes, o material-ui contém a opção de autocomplete com negrito para o input de texto, o que é pedido no desafio.
@@ -79,11 +88,19 @@ O hook utilizado por padrão em useQuery faz inúmeras requisições ao backend,
 
 ## Adição da base inicial de sugestões
 
-Para criar a base de início utilizei o modelo LLama3-70b pelo Groq com o Google Colab para criar 100 possíveis sugestões. Isso foi possível utilizando um prompt few-shot, cujos exemplos consegui de sugestões que verifiquei na ferramenta de busca do site Jusbrasil. Com as 100 sugestões criadas sinteticamente, utilizei Regex para salvá-las em um json por um dicionário com uma lista de 'buscas'. 
+Para criar a base de início utilizei o modelo LLama3-70b pelo Groq com o Google Colab para criar 100 possíveis sugestões. Isso foi possível utilizando um prompt few-shot, cujos exemplos consegui de sugestões que verifiquei na ferramenta de busca do site Jusbrasil. Com as 100 sugestões criadas sinteticamente, utilizei Regex para salvá-las em um json por um dicionário com uma lista de 'buscas'.
+
+Além disso, repeti o processo para os "100 termos mais comuns da área do direito", adicionando cada um desses termos e criando 3 novas sugestões relacionadas a cada um deles. Com isso, totalizamos 500 sugestões iniciais.
 
 ## Mutação para adicionar sugestões
 
 Foi criado um Hook de mutação em GraphQL, por sugestão do próprio site, para poder adicionar sugestões à base de dados. Essas sugestões são o texto que está digitado no campo de busca antes de o usuário clicar no botão "BUSCAR". Essa sugestão é adicionada ao início da lista, o que configura maior prioridade de recomendação para sugestões mais recentes. 
 
 Quando se adiciona a sugestão também é limpo o cache do Apollo. Isso é feito pois o cache tem o resultado para queries anteriores armazenado, mas como alguns desses resultados podem ter sido alterados ao introduzir uma nova sugestão à lista, a requisição deve ser feita novamente, e não só utilizada a que já está salva (por estar desatualizada).
+
+## Dockerização do projeto
+
+A dockerização foi feita utilizando dois Dockerfiles: um para o backend e um para o frontend, e com o docker-compose foi possível gerar um container com as dependências do proejeto. 
+
+Como pelo enunciado o código deve poder ser executado em Ubuntu ou MAC OS X, e não utilizo nenhum deles em meu computador, optei por instalar o Ubuntu 20 pela ferramenta WSL do windows, que permite utilizar um subsistema Linux no Windows. Como não tive problemas para rodar `docker-compose up --build` em nenhum dos dois sistemas, acredito que não devam haver problemas na execução.
 

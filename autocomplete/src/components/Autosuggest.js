@@ -43,6 +43,7 @@ const [setMatch, { loadingSet, errorSet, dataSet }] = useMutation(SET_MATCHES);
 
 const handleClick = (text) => {
   setQuery(text);
+  getMatches({ variables: { text: text } });
 };
 
 const handleSearch = async () => {

@@ -42,6 +42,14 @@ Se um usuário buscar por algo que ainda não foi definido como uma possível su
 
 **Problema com implementação atual:** A implementação atual foi apenas para teste da funcionalidade, em uma situação real é válido utilizar outra estrutura de dados para esse caso, que utilize a frequência da pesquisa em consideração. Ela pode também armazenar as pesquisas feitas pelos próprios usuários, uma vez que procurar novamente pela mesma query é um comportamento esperado.
 
+## Substituição de lista para Trie
+
+**Motivação:** Devemos garantir a escalabilidade de várias buscas sendo armazenadas.
+
+Vamos utilizar a estrutura de dados Trie, que é uma árvore onde cada nó é representado por um caractere e um valor, que determina se o nó é final de alguma busca já realizada ou não. Isso garante melhor escalabilidade (em termos de velocidade e armazenamento) das sugestões.
+
+Além disso, adicionando novos nós no início da lista de filhos proporciona com que buscas antigas tenham alta prioridade, mas não sejam necessariamente a primeira, evitando a influência de "ataques" a esse algoritmo, onde um usuário mal intencionado faz várias buscas com strings sem sentido.
+
 # Log
 
 Aqui descreverei etapa por etapa do que está sendo desenvolvido no projeto, à medida que cada etapa ocorre. 
@@ -103,4 +111,16 @@ Quando se adiciona a sugestão também é limpo o cache do Apollo. Isso é feito
 A dockerização foi feita utilizando dois Dockerfiles: um para o backend e um para o frontend, e com o docker-compose foi possível gerar um container com as dependências do proejeto. 
 
 Como pelo enunciado o código deve poder ser executado em Ubuntu ou MAC OS X, e não utilizo nenhum deles em meu computador, optei por instalar o Ubuntu 20 pela ferramenta WSL do windows, que permite utilizar um subsistema Linux no Windows. Como não tive problemas para rodar `docker-compose up --build` em nenhum dos dois sistemas, acredito que não devam haver problemas na execução.
+
+## Substituição de lista para Trie
+
+Armazenar uma lista com todas as strings já procuradas no Jusbrasil não é uma ideia escalável. Para tanto devemos:
+
+1 - Garantir que a estrutura de dados se comporte melhor que uma lista de strings para armazenar os dados
+
+2 - O algoritmo de busca de sugestões seja mais rápido que percorrer uma lista inteira de sugestões e uma a uma comparando as strings.
+
+Para tanto vamos utilizar a estrutura de dados Trie, que é uma árvore onde cada nó é representado por um caractere e um valor, que determina se o nó é final de alguma busca já realizada ou não.
+
+Dessa forma, a busca é muito mais rápida e a estrutura é muito mais amigável para armazenar sugestões, uma vez que o espaço que seria gasto para armazenar o prefixo de uma sugestão não cresce conforme novas buscas. 
 

@@ -22,19 +22,21 @@ const OptionButton = withStyles({
 })(Button);
 
 function Autosuggest() {
-  const [query, setQuery] = useState('');
 
   const GET_MATCHES = gql`
   query GetMatches($text: String!) {
     getMatches(text: $text)
   }
 `;
-const client = useApolloClient();
+
 const SET_MATCHES = gql`
   mutation SetMatch($text: String!) {
     setMatch(text: $text)
   }
 `;
+
+const [query, setQuery] = useState('');
+const client = useApolloClient();
 
 const [getMatches, { loading, error, data, refetch }] = useLazyQuery(GET_MATCHES);
 const [setMatch, { loadingSet, errorSet, dataSet }] = useMutation(SET_MATCHES);
@@ -91,6 +93,7 @@ return (
         BUSCAR
       </Button>
     </div>
+    
     <div className='Opcoes'>
       {loading ? (
         <p></p>

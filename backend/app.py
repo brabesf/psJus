@@ -26,8 +26,11 @@ class Suggestor:
 
     def add_suggestion(self, suggestion:str):
         '''
-        Adds suggestion to start of list
+        Adds suggestion to start of list, removing accent marks
         '''
+        for i in self.suggestions:
+            if i.lower() == unidecode.unidecode(suggestion).lower():
+                return 
         self.suggestions.insert(0, unidecode.unidecode(suggestion))
     
     def get_suggestion(self, query:str) -> List[str]:
